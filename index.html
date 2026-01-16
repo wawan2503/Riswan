@@ -1,0 +1,484 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riswan Gandek</title>
+  <style>
+    :root {
+      --pink: #ff4da6;
+      --cyan: #2dffe0;
+      --violet: #8a4dff;
+      --deep: #050014;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 22% 20%, rgba(255, 77, 166, 0.4), transparent 60%),
+                  radial-gradient(circle at 78% 30%, rgba(45, 255, 224, 0.25), transparent 55%),
+                  linear-gradient(135deg, #030012, #0b0027 60%, #020008);
+      color: #fff;
+      font-family: "Poppins", "Montserrat", system-ui, sans-serif;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 1400px;
+      isolation: isolate;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.12), transparent 70%);
+      filter: blur(140px);
+      animation: glow 12s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: -4;
+    }
+
+    body::after {
+      background: radial-gradient(circle, rgba(45, 255, 224, 0.18), transparent 60%);
+      animation-duration: 18s;
+      animation-direction: reverse;
+    }
+
+    .grid {
+      position: absolute;
+      inset: -10%;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 120px 120px;
+      opacity: 0.15;
+      mix-blend-mode: screen;
+      animation: slide 16s linear infinite;
+      z-index: -3;
+    }
+
+    .nebula {
+      position: absolute;
+      width: 140vmax;
+      height: 140vmax;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.6;
+      animation: nebula 30s linear infinite;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    .nebula.one {
+      background: radial-gradient(circle, rgba(255, 77, 166, 0.45), transparent 60%);
+    }
+
+    .nebula.two {
+      background: radial-gradient(circle, rgba(45, 255, 224, 0.3), transparent 55%);
+      animation-duration: 36s;
+      animation-direction: reverse;
+    }
+
+    .ring {
+      position: absolute;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 50%;
+      animation: ringSpin linear infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .ring.one { width: 60vmax; height: 60vmax; animation-duration: 12s; }
+    .ring.two { width: 80vmax; height: 80vmax; animation-duration: 20s; }
+    .ring.three { width: 110vmax; height: 110vmax; animation-duration: 28s; }
+
+    #particleLayer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    #title {
+      position: absolute;
+      top: 56%;
+      left: 50%;
+      transform-style: preserve-3d;
+      font-size: clamp(2.8rem, 12vw, 7.5rem);
+      font-weight: 900;
+      letter-spacing: 0.4rem;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #fff;
+      text-shadow:
+        0 0 25px rgba(255, 77, 166, 0.8),
+        0 0 55px rgba(45, 255, 224, 0.65);
+      animation: swirl 5.8s linear infinite;
+    }
+
+    #title::before,
+    #title::after {
+      content: "RISWAN GANDEK";
+      position: absolute;
+      inset: 0;
+      color: #fff;
+      mix-blend-mode: screen;
+      opacity: 0.45;
+      filter: blur(6px);
+    }
+
+    #title::before { transform: translate3d(-6px, -6px, -30px); color: var(--pink); }
+    #title::after { transform: translate3d(6px, 6px, -50px); color: var(--cyan); }
+
+    .play-orb {
+      position: absolute;
+      bottom: 6vh;
+      left: 50%;
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), transparent),
+                  linear-gradient(135deg, var(--pink), var(--violet));
+      box-shadow: 0 0 30px rgba(255, 77, 166, 0.4), 0 0 60px rgba(45, 255, 224, 0.35);
+      animation: orbPulse 1.8s ease-in-out infinite;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .play-orb::before,
+    .play-orb::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      inset: 0;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      animation: ringPulse 2.6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .play-orb::after {
+      inset: -16px;
+      opacity: 0.4;
+    }
+
+    .play-core {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .play-core::before,
+    .play-core::after {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 18px;
+      background: var(--deep);
+      border-radius: 2px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .play-core::before { left: 10px; }
+    .play-core::after { right: 10px; }
+
+    .play-orb.paused .play-core::after {
+      display: none;
+    }
+
+    .play-orb.paused .play-core::before {
+      width: 0;
+      height: 0;
+      border-left: 16px solid var(--deep);
+      border-top: 11px solid transparent;
+      border-bottom: 11px solid transparent;
+      background: transparent;
+      border-radius: 0;
+      left: 8px;
+    }
+
+    .heart {
+      --size: 26px;
+      --dur: 6s;
+      --pathX: 0vw;
+      position: absolute;
+      bottom: -12vh;
+      left: 50%;
+      width: var(--size);
+      height: var(--size);
+      background: linear-gradient(145deg, rgba(255, 77, 166, 0.9), rgba(141, 0, 255, 0.85));
+      transform: rotate(45deg);
+      border-radius: 8px 8px 2px 2px;
+      animation: heartRise var(--dur) ease-out forwards;
+      opacity: 0;
+      filter: drop-shadow(0 0 12px rgba(255, 77, 166, 0.6));
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: var(--size);
+      height: var(--size);
+      background: inherit;
+      border-radius: 50%;
+    }
+
+    .heart::before { top: -50%; left: 0; }
+    .heart::after { left: -50%; top: 0; }
+
+    .spark {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.9), transparent 70%);
+      box-shadow: 0 0 10px rgba(45, 255, 224, 0.65);
+      animation: sparkleDrift var(--sparkDur) linear forwards;
+      opacity: 0;
+    }
+    #ytPlayer {
+      position: absolute;
+      width: 0;
+      height: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+
+
+
+    @keyframes glow {
+      0% { opacity: 0.35; transform: scale(1); }
+      100% { opacity: 0.75; transform: scale(1.25) translate(-6%, 8%); }
+    }
+
+    @keyframes slide {
+      from { transform: translateY(0); }
+      to { transform: translateY(120px); }
+    }
+
+    @keyframes nebula {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.1); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    @keyframes ringSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes swirl {
+      0% { transform: translate(-50%, -50%) translate3d(0, 0, 0) scale(1) rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+      20% { transform: translate(-50%, -50%) translate3d(4vw, -8vh, 30px) scale(1.12) rotateX(12deg) rotateY(-15deg) rotateZ(220deg); }
+      40% { transform: translate(-50%, -50%) translate3d(-6vw, 6vh, -24px) scale(0.95) rotateX(-15deg) rotateY(12deg) rotateZ(420deg); }
+      60% { transform: translate(-50%, -50%) translate3d(3vw, -4vh, 40px) scale(1.18) rotateX(22deg) rotateY(-10deg) rotateZ(620deg); }
+      80% { transform: translate(-50%, -50%) translate3d(-4vw, -5vh, -28px) scale(0.99) rotateX(-18deg) rotateY(16deg) rotateZ(820deg); }
+      100% { transform: translate(-50%, -50%) translate3d(0, 0, 0) scale(1.04) rotateX(0deg) rotateY(0deg) rotateZ(1000deg); }
+    }
+
+    @keyframes orbPulse {
+      0%, 100% { transform: translateX(-50%) scale(0.92); opacity: 0.85; }
+      50% { transform: translateX(-50%) scale(1.08); opacity: 1; }
+    }
+
+    @keyframes ringPulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.35); opacity: 0; }
+    }
+
+    @keyframes heartRise {
+      0% { opacity: 0; transform: translate3d(calc(var(--pathX) * -0.2), 18vh, 0) rotate(45deg) scale(0.5); }
+      20% { opacity: 0.9; }
+      100% { opacity: 0; transform: translate3d(var(--pathX), -120vh, 0) rotate(45deg) scale(1.35); }
+    }
+
+    @keyframes sparkleDrift {
+      0% { opacity: 0; transform: translate3d(0, 20vh, 0) scale(0.2); }
+      20% { opacity: 0.9; }
+      100% { opacity: 0; transform: translate3d(var(--sparkX), -90vh, 0) scale(0.8); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="nebula one"></div>
+  <div class="nebula two"></div>
+  <div class="ring one"></div>
+  <div class="ring two"></div>
+  <div class="ring three"></div>
+
+  <div id="particleLayer"></div>
+  <div id="title">RISWAN GANDEK</div>
+  <div class="play-orb" id="playOrb" aria-hidden="true">
+    <div class="play-core"></div>
+  </div>
+
+  <div id="ytPlayer" aria-hidden="true"></div>
+
+  <script>
+    const layer = document.getElementById('particleLayer');
+    const playOrb = document.getElementById('playOrb');
+    const YT_VIDEO_ID = 'inDEsr8UuWQ';
+    const YT_PLAYLIST_ID = 'RDinDEsr8UuWQ';
+    const START_SECONDS = 95;
+    let player;
+    let wantsPlay = true;
+
+    function spawnHeart() {
+      const heart = document.createElement('span');
+      heart.className = 'heart';
+      heart.style.setProperty('--dur', (4 + Math.random() * 3).toFixed(2) + 's');
+      heart.style.setProperty('--size', 18 + Math.random() * 28 + 'px');
+      heart.style.setProperty('--pathX', (Math.random() * 70 - 35) + 'vw');
+      layer.appendChild(heart);
+      setTimeout(() => heart.remove(), 7000);
+    }
+
+    function spawnSpark() {
+      const spark = document.createElement('span');
+      spark.className = 'spark';
+      spark.style.left = Math.random() * 100 + '%';
+      spark.style.setProperty('--sparkDur', (3 + Math.random() * 4).toFixed(2) + 's');
+      spark.style.setProperty('--sparkX', (Math.random() * 60 - 30) + 'vw');
+      layer.appendChild(spark);
+      setTimeout(() => spark.remove(), 6000);
+    }
+
+    setInterval(spawnHeart, 260);
+    setInterval(spawnSpark, 340);
+
+    const syncOrb = (state) => {
+      if (!window.YT || !window.YT.PlayerState) return;
+      const playingStates = [YT.PlayerState.PLAYING, YT.PlayerState.BUFFERING];
+      if (playingStates.includes(state)) {
+        playOrb.classList.remove('paused');
+      } else {
+        playOrb.classList.add('paused');
+      }
+    };
+
+    const createPlayer = () => {
+      if (player || !(window.YT && window.YT.Player)) return;
+      player = new YT.Player('ytPlayer', {
+        videoId: YT_VIDEO_ID,
+        playerVars: {
+          autoplay: 1,
+          controls: 0,
+          disablekb: 1,
+          fs: 0,
+          modestbranding: 1,
+          rel: 0,
+          loop: 1,
+          playlist: YT_PLAYLIST_ID,
+          listType: 'playlist',
+          list: YT_PLAYLIST_ID,
+          playsinline: 1,
+          start: START_SECONDS
+        },
+        events: {
+          onReady: (event) => {
+            event.target.setVolume(80);
+            event.target.seekTo(START_SECONDS, true);
+            if (wantsPlay) {
+              event.target.playVideo();
+            }
+          },
+          onStateChange: (event) => {
+            syncOrb(event.data);
+            if (event.data === YT.PlayerState.ENDED && wantsPlay) {
+              event.target.seekTo(START_SECONDS, true);
+              event.target.playVideo();
+            }
+          }
+        }
+      });
+    };
+
+    const loadYouTubeAPI = () => {
+      if (window.YT && window.YT.Player) {
+        createPlayer();
+        return;
+      }
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+    };
+
+    window.onYouTubeIframeAPIReady = () => {
+      createPlayer();
+    };
+
+    const togglePlayback = (event) => {
+      event?.stopPropagation();
+      if (!player || !window.YT) return;
+      const state = player.getPlayerState();
+      if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
+        wantsPlay = false;
+        player.pauseVideo();
+      } else {
+        wantsPlay = true;
+        player.seekTo(START_SECONDS, true);
+        player.playVideo();
+      }
+    };
+
+    const nudgePlay = () => {
+      if (!player) return;
+      wantsPlay = true;
+      player.seekTo(START_SECONDS, true);
+      player.playVideo();
+    };
+
+    const handleFirstInteraction = () => {
+      if (player) {
+        nudgePlay();
+        window.removeEventListener('pointerdown', handleFirstInteraction);
+        window.removeEventListener('keydown', handleFirstInteraction);
+      }
+    };
+
+    playOrb.addEventListener('pointerdown', togglePlayback);
+    window.addEventListener('pointerdown', handleFirstInteraction);
+    window.addEventListener('keydown', handleFirstInteraction);
+
+    loadYouTubeAPI();
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
